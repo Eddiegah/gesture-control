@@ -1,75 +1,157 @@
-# GestureControl — Hand Gesture Presentation & Media Controller
+<div align="center">
 
-Control PowerPoint, Google Slides, Spotify, YouTube, VLC — and anything else
-with keyboard shortcuts — using only your hand in front of a webcam.  No mouse,
-no keyboard needed.
+<img src="https://img.shields.io/badge/Python-3.9--3.12-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3.9-3.12"/>
+<img src="https://img.shields.io/badge/MediaPipe-0.10.21-00897B?style=for-the-badge&logo=google&logoColor=white" alt="MediaPipe"/>
+<img src="https://img.shields.io/badge/OpenCV-4.10.0-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white" alt="OpenCV"/>
+<img src="https://img.shields.io/badge/Platform-Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white" alt="Windows"/>
+<img src="https://img.shields.io/badge/License-MIT-22C55E?style=for-the-badge" alt="MIT License"/>
+<img src="https://img.shields.io/badge/Status-Active-brightgreen?style=for-the-badge" alt="Active"/>
+
+<br/><br/>
+
+# 🖐️ GestureControl
+
+### Real-time hand gesture control for presentations & media — no mouse, no keyboard.
+
+Point, swipe, pinch. That's it.
+
+<br/>
+
+> **Control PowerPoint · Google Slides · Spotify · YouTube · VLC**  
+> via your webcam using 7 hand gestures, entirely rule-based — no ML training required.
+
+<br/>
 
 ---
 
-## Table of Contents
+</div>
 
-1. [Requirements](#requirements)
-2. [Setup](#setup)
-3. [Running the App](#running-the-app)
-4. [Gesture Mappings](#gesture-mappings)
-5. [Runtime Controls](#runtime-controls)
-6. [Customising Key Bindings](#customising-key-bindings)
-7. [Troubleshooting](#troubleshooting)
-8. [Architecture Notes](#architecture-notes)
+## ✨ Features
+
+- 🎥 **Real-time webcam detection** at 30 fps using MediaPipe Hands
+- 🤌 **7 gestures** — swipe left/right, pinch, open palm hold, fist, thumbs up/down
+- ⚡ **Sub-100ms latency** from gesture to keypress
+- 🗂️ **Two built-in modes** — Presentation and Media, switchable at runtime
+- 🔧 **Fully configurable** — remap any gesture to any key via JSON, no code edits
+- 🖼️ **Live overlay HUD** — landmarks, gesture name, and action flash on screen
+- 🔒 **pyautogui fail-safe enabled** — move mouse to screen corner to abort instantly
+- 💻 **Windows-first**, works via OS-level key simulation with any app
+
+<br/>
 
 ---
 
-## Requirements
+## 📽️ Demo
 
-| Item | Version |
+> **Coming soon** — record a short screen capture and drop it here.
+>
+> To add your own:
+> 1. Record a screen capture using `Win + G` (Xbox Game Bar) or OBS
+> 2. Upload the `.gif` or `.mp4` to this repo (drag into a GitHub Issue or use Releases)
+> 3. Replace this block with:
+>
+> ```md
+> ![GestureControl Demo](assets/demo.gif)
+> ```
+>
+> Or for a hosted video:
+>
+> ```md
+> [![Watch the demo](https://img.youtube.com/vi/YOUR_VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=YOUR_VIDEO_ID)
+> ```
+
+<br/>
+
+---
+
+## 🗂️ Project Structure
+
+```
+gesture-control/
+│
+├── src/
+│   ├── hand_tracker.py       # MediaPipe wrapper + rolling wrist-position history
+│   ├── gesture_detector.py   # Geometric rule-based gesture recognition + debounce
+│   ├── action_mapper.py      # Config-driven gesture → keypress dispatcher
+│   └── main.py               # Webcam loop, HUD overlay, mode switching
+│
+├── config/
+│   ├── presentation_mode.json   # Slide navigation key mappings
+│   └── media_mode.json          # Music / video playback key mappings
+│
+├── requirements.txt
+├── .gitignore
+└── README.md
+```
+
+<br/>
+
+---
+
+## ⚙️ Setup
+
+### Prerequisites
+
+| Requirement | Detail |
 |---|---|
-| Python | **3.9 – 3.12** (3.13+ is **not** supported — MediaPipe incompatible) |
-| OS | Windows 10/11 (primary), macOS/Linux (mostly works, not tested) |
-| Webcam | Any USB or built-in camera |
+| **Python** | `3.9 – 3.12` only — MediaPipe does **not** support 3.13+ |
+| **OS** | Windows 10 / 11 (primary). macOS/Linux mostly works. |
+| **Webcam** | Any built-in or USB camera |
+| **Git** | To clone the repo |
+
+> ⚠️ **OneDrive warning** — do **not** place this project inside a OneDrive-synced folder.
+> OneDrive can lock files mid-write during `pip install` and cause permission errors.
+> Use a path like `C:\Projects\gesture-control` instead.
 
 ---
 
-## Setup
-
-### 1. Check your Python installation
+### Step 1 — Check your Python version
 
 ```cmd
 py -0
 ```
 
-You need a `3.9`, `3.10`, `3.11`, or `3.12` entry.  
-If only `3.13` or `3.14` are shown, install Python 3.11 from
-<https://www.python.org/downloads/release/python-3119/> (Windows installer,
-"Add to PATH" checked).
+You need a `3.9`, `3.10`, `3.11`, or `3.12` entry in the list.
+If only `3.13` or `3.14` appear, install Python 3.11 from:
+👉 https://www.python.org/downloads/release/python-3119/
+_(Windows installer — check "Add to PATH")_
 
-### 2. Clone / open the project
+---
 
-Make sure the project is **not** inside a OneDrive-synced folder.  
-Recommended path: `C:\Projects\gesture-control`
+### Step 2 — Clone the repo
 
-OneDrive can lock files mid-write and cause permission errors during `pip install`.
+```cmd
+git clone https://github.com/Eddiegah/gesture-control.git
+cd gesture-control
+```
 
-### 3. Create a virtual environment
+---
+
+### Step 3 — Create a virtual environment
 
 ```cmd
 py -3.11 -m venv venv
 ```
 
-### 4. Activate the virtual environment
+---
+
+### Step 4 — Activate the virtual environment
 
 ```cmd
 venv\Scripts\activate
 ```
 
-Your prompt will show `(venv)` when active.
+Your terminal prompt will show `(venv)` when active.
 
-### 5. Install dependencies
+---
+
+### Step 5 — Install dependencies
 
 ```cmd
 pip install -r requirements.txt
 ```
 
-Pinned versions used:
+Pinned versions:
 
 ```
 mediapipe==0.10.21
@@ -79,171 +161,262 @@ pyautogui==0.9.54
 pynput==1.7.7
 ```
 
-If any of these are unavailable at your install time, substitute the closest
-available patch version (e.g. `mediapipe==0.10.22`).
+---
 
-### 6. Verify the installation
+### Step 6 — Verify the installation
 
 ```cmd
 python -c "import mediapipe; import cv2; import pyautogui; import numpy; print('All imports OK')"
 ```
 
-Expected output: `All imports OK`
+**Expected output:** `All imports OK`
+
+If you see a DLL error instead, jump to [Troubleshooting](#-troubleshooting).
+
+<br/>
 
 ---
 
-## Running the App
+## 🚀 Running the App
 
 ```cmd
-# From the project root, with venv activated:
-
-python src/main.py                    # Presentation mode (default)
-python src/main.py --mode media       # Media mode
-python src/main.py --mode presentation --camera 1   # second webcam
-```
-
-A window will open showing your webcam feed with the hand skeleton drawn over it.
-
----
-
-## Gesture Mappings
-
-### Presentation Mode (default)
-
-| Gesture | Action | Key sent |
-|---|---|---|
-| Swipe right | Next slide | `→` Right arrow |
-| Swipe left | Previous slide | `←` Left arrow |
-| Pinch | Start slideshow | `F5` |
-| Open palm (held) | End slideshow | `Esc` |
-| Thumbs up | Volume up | `VolumeUp` |
-| Thumbs down | Volume down | `VolumeDown` |
-| Fist | Screenshot | `Win+Shift+S` |
-
-### Media Mode
-
-| Gesture | Action | Key sent |
-|---|---|---|
-| Swipe right | Next track / seek forward | `NextTrack` |
-| Swipe left | Previous track / seek back | `PrevTrack` |
-| Pinch | Play / Pause | `PlayPause` |
-| Open palm (held) | Mute | `M` |
-| Thumbs up | Volume up | `VolumeUp` |
-| Thumbs down | Volume down | `VolumeDown` |
-| Fist | Screenshot | `Win+Shift+S` |
-
----
-
-## Runtime Controls
-
-| Key | Action |
-|---|---|
-| `h` | Toggle debug overlay (landmarks + status text) |
-| `m` | Cycle between Presentation and Media modes |
-| `q` or `Esc` | Quit |
-
----
-
-## Customising Key Bindings
-
-Edit the JSON files in `config/` — no code changes needed.
-
-Each gesture entry has:
-
-```json
-"swipe_right": { "type": "key",    "value": "right" }
-"fist":        { "type": "hotkey", "value": ["win", "shift", "s"] }
-```
-
-- `"type": "key"` — a single key name from [pyautogui's key list](https://pyautogui.readthedocs.io/en/latest/keyboard.html#keyboard-keys)
-- `"type": "hotkey"` — list of key names pressed simultaneously
-
-You can also add a `display_labels` entry to change the on-screen flash text
-for any gesture.
-
----
-
-## Troubleshooting
-
-### `DLL load failed` on Windows when importing mediapipe or opencv
-
-Install the Microsoft Visual C++ Redistributable (both x64 and x86):
-
-- x64: <https://aka.ms/vs/17/release/vc_redist.x64.exe>
-- x86: <https://aka.ms/vs/17/release/vc_redist.x86.exe>
-
-Restart your PC, re-activate the venv, and retry the import verification.
-
-### `ModuleNotFoundError: No module named 'mediapipe'`
-
-You're not in the virtual environment. Run:
-
-```cmd
+# Activate venv first (if not already active):
 venv\Scripts\activate
-```
 
-### Camera not opening / black screen
+# Start in Presentation mode (default):
+python src/main.py
 
-Try a different camera index:
+# Start in Media mode:
+python src/main.py --mode media
 
-```cmd
+# Use a different webcam (e.g. if index 0 is an IR camera):
 python src/main.py --camera 1
 ```
 
-Some laptops enumerate the IR camera as index 0 and the visible-light camera as 1.
+A window will open showing your webcam feed with the hand skeleton overlaid.
 
-### Gestures fire too easily / too late
-
-Tune the thresholds at the top of `src/gesture_detector.py`:
-
-| Constant | Default | Effect |
-|---|---|---|
-| `COOLDOWN_S` | `0.8` | Minimum gap between any two gestures |
-| `SWIPE_MIN_DELTA_X` | `0.15` | How far you must swipe (15 % of frame width) |
-| `SWIPE_WINDOW_S` | `0.6` | Time window in which a swipe must complete |
-| `PINCH_THRESHOLD` | `0.08` | How close thumb+index must be (relative to palm size) |
-| `PALM_HOLD_S` | `0.5` | How long to hold open palm before it fires |
-
-### pyautogui FailSafeException — script aborted
-
-You moved the mouse to a screen corner.  This is the `pyautogui` built-in
-fail-safe and is intentionally **kept enabled** as a safety net during testing.
-Just re-run the script.
-
-### OneDrive sync conflicts during install
-
-Move the project to a non-OneDrive path such as `C:\Projects\gesture-control`
-and re-run the setup steps.
+<br/>
 
 ---
 
-## Architecture Notes
+## 🤌 Gesture Reference
+
+### 🎞️ Presentation Mode
+
+| Gesture | How to perform it | Action | Key sent |
+|---|---|---|---|
+| **Swipe Right** | Move hand left → right briskly | Next slide | `→` Right arrow |
+| **Swipe Left** | Move hand right → left briskly | Previous slide | `←` Left arrow |
+| **Pinch** | Bring thumb tip + index tip together | Start slideshow | `F5` |
+| **Open Palm** | Spread all fingers, hold still ~0.5s | End slideshow | `Esc` |
+| **Thumbs Up** | Thumb up, other fingers curled | Volume up | `VolumeUp` |
+| **Thumbs Down** | Thumb down, other fingers curled | Volume down | `VolumeDown` |
+| **Fist** | Curl all fingers closed | Screenshot | `Win + Shift + S` |
+
+---
+
+### 🎵 Media Mode
+
+| Gesture | How to perform it | Action | Key sent |
+|---|---|---|---|
+| **Swipe Right** | Move hand left → right briskly | Next track | `NextTrack` |
+| **Swipe Left** | Move hand right → left briskly | Previous track | `PrevTrack` |
+| **Pinch** | Bring thumb tip + index tip together | Play / Pause | `PlayPause` |
+| **Open Palm** | Spread all fingers, hold still ~0.5s | Mute | `M` |
+| **Thumbs Up** | Thumb up, other fingers curled | Volume up | `VolumeUp` |
+| **Thumbs Down** | Thumb down, other fingers curled | Volume down | `VolumeDown` |
+| **Fist** | Curl all fingers closed | Screenshot | `Win + Shift + S` |
+
+<br/>
+
+---
+
+## ⌨️ Runtime Controls
+
+These keys work while the GestureControl window is in focus:
+
+| Key | Action |
+|---|---|
+| `H` | Toggle landmark + status overlay on / off |
+| `M` | Cycle between Presentation and Media modes |
+| `Q` or `Esc` | Quit |
+
+<br/>
+
+---
+
+## 🔧 Customising Key Bindings
+
+Edit the JSON files in `config/` — **no code changes needed**.
+
+```json
+{
+  "gesture_map": {
+    "swipe_right": { "type": "key",    "value": "right"              },
+    "fist":        { "type": "hotkey", "value": ["win", "shift", "s"] }
+  },
+  "display_labels": {
+    "swipe_right": "→ NEXT SLIDE",
+    "fist":        "📸 SCREENSHOT"
+  }
+}
+```
+
+**Action types:**
+
+| Type | Value format | Example |
+|---|---|---|
+| `"key"` | Single key name string | `"f5"`, `"space"`, `"volumeup"` |
+| `"hotkey"` | Array of key names | `["ctrl", "shift", "p"]` |
+
+Full list of valid key names: [pyautogui keyboard keys](https://pyautogui.readthedocs.io/en/latest/keyboard.html#keyboard-keys)
+
+<br/>
+
+---
+
+## 🎛️ Tuning Gesture Sensitivity
+
+All thresholds are at the top of `src/gesture_detector.py` and are commented:
+
+| Constant | Default | What it controls |
+|---|---|---|
+| `COOLDOWN_S` | `0.8` | Minimum seconds between any two gesture triggers |
+| `SWIPE_MIN_DELTA_X` | `0.15` | Swipe travel required (15% of frame width) |
+| `SWIPE_WINDOW_S` | `0.6` | Time window in which a swipe must complete |
+| `PINCH_THRESHOLD` | `0.08` | Thumb–index closeness (relative to palm size) |
+| `PALM_HOLD_S` | `0.5` | Seconds you must hold an open palm before it fires |
+| `STATIC_THRESHOLD` | `0.03` | Max wrist drift to count as "stationary" |
+
+**Too sensitive?** Raise `SWIPE_MIN_DELTA_X` or lower `PINCH_THRESHOLD`.  
+**Not sensitive enough?** Lower `SWIPE_MIN_DELTA_X` or raise `PINCH_THRESHOLD`.
+
+<br/>
+
+---
+
+## 🛠️ Troubleshooting
+
+<details>
+<summary><strong>❌ DLL load failed — mediapipe or opencv won't import</strong></summary>
+
+Install the Microsoft Visual C++ Redistributable (both architectures):
+
+- **x64:** https://aka.ms/vs/17/release/vc_redist.x64.exe
+- **x86:** https://aka.ms/vs/17/release/vc_redist.x86.exe
+
+Restart your PC, re-activate the venv, then retry:
+```cmd
+python -c "import mediapipe; import cv2; print('OK')"
+```
+</details>
+
+<details>
+<summary><strong>❌ ModuleNotFoundError: No module named 'mediapipe'</strong></summary>
+
+You're not inside the virtual environment. Run:
+```cmd
+venv\Scripts\activate
+```
+Your prompt should show `(venv)` before the path.
+</details>
+
+<details>
+<summary><strong>❌ Camera not opening / black screen</strong></summary>
+
+Try a different camera index:
+```cmd
+python src/main.py --camera 1
+```
+Some laptops list the IR camera as index 0 and the RGB camera as index 1.
+</details>
+
+<details>
+<summary><strong>❌ pyautogui FailSafeException — script aborted</strong></summary>
+
+You moved the mouse to a screen corner. This is intentional — pyautogui's
+built-in fail-safe is kept enabled as a safety net. Just re-run the script.
+</details>
+
+<details>
+<summary><strong>❌ Gestures fire too often or not at all</strong></summary>
+
+Adjust the threshold constants at the top of `src/gesture_detector.py`.
+See the [Tuning Gesture Sensitivity](#-tuning-gesture-sensitivity) table above.
+</details>
+
+<details>
+<summary><strong>❌ pip install errors / permission denied</strong></summary>
+
+Make sure the project is **not** inside a OneDrive folder.
+Move it to `C:\Projects\gesture-control` and redo the setup steps.
+</details>
+
+<br/>
+
+---
+
+## 🏗️ How It Works
 
 ```
-gesture-control/
-├── src/
-│   ├── hand_tracker.py     # MediaPipe wrapper + rolling wrist-position history
-│   ├── gesture_detector.py # Rule-based geometric gesture recognition + debounce
-│   ├── action_mapper.py    # Config-driven gesture → keypress dispatcher
-│   └── main.py             # Webcam loop, overlay UI, mode switching
-├── config/
-│   ├── presentation_mode.json
-│   └── media_mode.json
-├── requirements.txt
-├── .gitignore
-└── README.md
+Webcam frame
+     │
+     ▼
+┌─────────────────┐
+│  hand_tracker   │  MediaPipe Hands → 21 landmarks + rolling wrist history
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────────┐
+│  gesture_detector   │  Geometric rules (distances / angles) → gesture name
+│                     │  + debounce / cooldown (0.8 s gap between triggers)
+└────────┬────────────┘
+         │
+         ▼
+┌─────────────────┐
+│  action_mapper  │  JSON config → pyautogui.press() / pyautogui.hotkey()
+└────────┬────────┘
+         │
+         ▼
+   OS keypress event
+   (works with any app)
 ```
 
-**Gesture detection approach:** purely geometric — distances and angles between
-the 21 MediaPipe hand landmarks are compared against tunable thresholds.
-No ML classifier is required, which keeps the code transparent and easy to tune.
-A learned classifier (e.g. a small MLP on landmark coordinates) is a natural
-future upgrade if rule-based detection proves unreliable for a particular gesture.
+**Detection is purely geometric** — no ML classifier, no training data.
+Distances and angles between the 21 MediaPipe landmarks are compared against
+tunable thresholds. This makes the logic transparent and easy to tune.
 
-**Latency:** MediaPipe runs on CPU in real time at 30 fps on a modern laptop.
-The gesture-to-keypress path is entirely in-process (no network calls), so
-end-to-end latency is well under 100 ms under normal conditions.
+A learned classifier (e.g. a small MLP on flattened landmark coordinates) is
+a natural future upgrade if rule-based detection proves unreliable for a
+specific gesture in your environment.
 
-**Key simulation:** `pyautogui` simulates OS-level keyboard events, so it works
-with any application that accepts keyboard shortcuts — no app-specific API
-integration needed.
+<br/>
+
+---
+
+## 🗺️ Roadmap
+
+- [ ] Demo GIF / video in README
+- [ ] Two-hand gesture support (v2)
+- [ ] GUI settings panel for threshold tuning
+- [ ] Gesture recorder to capture custom key combos
+- [ ] macOS / Linux key simulation parity
+- [ ] Learned gesture classifier (optional upgrade path)
+
+<br/>
+
+---
+
+## 📄 License
+
+MIT © [Eddiegah](https://github.com/Eddiegah)
+
+<br/>
+
+---
+
+<div align="center">
+
+Built with 🖐️ using [MediaPipe](https://mediapipe.dev) · [OpenCV](https://opencv.org) · [pyautogui](https://pyautogui.readthedocs.io)
+
+</div>
