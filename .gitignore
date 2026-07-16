@@ -1,0 +1,39 @@
+# Python virtual environment
+venv/
+.venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pycache
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+*.egg
+
+# Logs and temp files
+*.log
+*.tmp
+*.bak
+
+# MediaPipe / OpenCV cache
+.mediapipe/
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS artefacts
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Screenshots taken by the fist gesture (saved to project root by default)
+screenshot_*.png

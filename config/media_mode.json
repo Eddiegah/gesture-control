@@ -1,0 +1,22 @@
+{
+  "_comment": "Media Mode — optimised for Spotify / YouTube / VLC playback control.",
+  "mode_name": "Media",
+  "gesture_map": {
+    "swipe_right":   { "type": "key",   "value": "nexttrack"  },
+    "swipe_left":    { "type": "key",   "value": "prevtrack"  },
+    "pinch":         { "type": "key",   "value": "playpause"  },
+    "open_palm":     { "type": "key",   "value": "m"          },
+    "fist":          { "type": "hotkey","value": ["win", "shift", "s"] },
+    "thumbs_up":     { "type": "key",   "value": "volumeup"   },
+    "thumbs_down":   { "type": "key",   "value": "volumedown" }
+  },
+  "display_labels": {
+    "swipe_right":   "⏭ NEXT TRACK",
+    "swipe_left":    "⏮ PREV TRACK",
+    "pinch":         "⏯ PLAY/PAUSE",
+    "open_palm":     "🔇 MUTE",
+    "fist":          "📸 SCREENSHOT",
+    "thumbs_up":     "🔊 VOL UP",
+    "thumbs_down":   "🔉 VOL DOWN"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "_comment": "Presentation Mode — optimised for PowerPoint / Google Slides navigation.",
+  "mode_name": "Presentation",
+  "gesture_map": {
+    "swipe_right":   { "type": "key",   "value": "right" },
+    "swipe_left":    { "type": "key",   "value": "left"  },
+    "pinch":         { "type": "key",   "value": "f5"    },
+    "open_palm":     { "type": "key",   "value": "escape"},
+    "fist":          { "type": "hotkey","value": ["win", "shift", "s"] },
+    "thumbs_up":     { "type": "key",   "value": "volumeup"   },
+    "thumbs_down":   { "type": "key",   "value": "volumedown" }
+  },
+  "display_labels": {
+    "swipe_right":   "→ NEXT SLIDE",
+    "swipe_left":    "← PREV SLIDE",
+    "pinch":         "▶ START SLIDESHOW",
+    "open_palm":     "■ END SLIDESHOW",
+    "fist":          "📸 SCREENSHOT",
+    "thumbs_up":     "🔊 VOL UP",
+    "thumbs_down":   "🔉 VOL DOWN"
+  }
+}
